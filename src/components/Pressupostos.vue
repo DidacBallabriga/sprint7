@@ -93,12 +93,11 @@ h4{
 }
 .divider{
     position: relative;
-    width: 100%;
+    width: 90%;
     border: 0;
     top: 0;
     left: 50%;
     display: block;
-    width: 100%;
     height: 1px;
     content: '';
     transform: translateX(-50%);
