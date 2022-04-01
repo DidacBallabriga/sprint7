@@ -14,6 +14,9 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  text-align: center;
+}
 h1{
   color: #fff;
   font-weight: 400;

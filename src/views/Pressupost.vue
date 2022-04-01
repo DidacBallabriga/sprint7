@@ -21,6 +21,8 @@ export default {
 h1{
   color: #fff;
   font-weight: 400;
+  text-align: center;
+  padding-bottom: 1.5rem;
 }
 h2{
   color: #718096;

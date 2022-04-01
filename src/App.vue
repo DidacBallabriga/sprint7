@@ -11,12 +11,11 @@
   font-family: 'Nunito Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  height: 100vh;
 }
 html,
 body {
-    height: 100%;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.7;
