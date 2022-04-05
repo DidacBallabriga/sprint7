@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="container" v-if="nomPressupost!==''&&nomClient!==''">
-    <h2>Resum comanda:</h2>
+    <h2>Resum del pressupost:</h2>
     <p><code>Nom del pressupost:</code> {{nomPressupost}}</p>
     <p><code>Nom del client:</code> {{nomClient}}</p>
     <div class="row">
@@ -13,14 +13,21 @@
       </ul>
     </p>
     <div class="col colbutton">
-      <button class="myButton" @click="addPressupostArray" v-if="nomPressupost!==''&&nomClient!==''&&totalPressupost!==0||seo==300||ads==200" >Guardar Pressupost</button>
+      <button class="myBtn btn" @click="addPressupostArray" v-if="nomPressupost!==''&&nomClient!==''&&totalPressupost!==0||seo==300||ads==200" >✓ Guardar Pressupost</button>
     </div>
     </div>
     </div>
     <div v-if="showPressupostos">
       <h3>Llistat de pressupostos</h3>
-      <div class="containerList" v-for="(pressupost, index) in llistaPressupostos" :key="index">
-        <code>Nº {{index+1}} - Pressupost:</code> {{pressupost.nomPressupost}} <code><b>-</b></code> <code>Client:</code> {{pressupost.nomClient}}<br>
+      <h6>ORDENA PER NOM:</h6>
+      <div class="filter">
+        <button class="myBtn btn" @click="ordenarAZ">PRESSUPOST</button>
+        <button class="myBtn btn" @click="ordenarClient">CLIENT</button>
+        <button class="myBtn btn" @click="ordenarReset">RESET</button>
+        <input type="text" placeholder="Cercar pressupost/client" v-model="cerca">
+      </div>
+      <div v-if="cerca===''" class="containerList" v-for="(pressupost, index) in llistaPressupostos" :key="index">
+        <code>Nº {{pressupost.id}} - Pressupost:</code> {{pressupost.nomPressupost}} <code><b>-</b></code> <code>Client:</code> {{pressupost.nomClient}}<br>
          <code>Serveis:</code>
           <ul>
             <li v-if="pressupost.servei1!==undefined">{{pressupost.servei1}}</li>
@@ -28,7 +35,16 @@
             <li v-if="pressupost.servei3!==undefined">{{pressupost.servei3}}</li>
           </ul>
         <code>Preu:</code> {{pressupost.totalPressupostos}}€
-        
+      </div>
+      <div v-if="cerca!==''" class="containerList" v-for="(pressupost, index) in llistaPressupostosRender" :key="index">
+        <code>Nº {{pressupost.id}} - Pressupost:</code> {{pressupost.nomPressupost}} <code><b>-</b></code> <code>Client:</code> {{pressupost.nomClient}}<br>
+         <code>Serveis:</code>
+          <ul>
+            <li v-if="pressupost.servei1!==undefined">{{pressupost.servei1}}</li>
+            <li v-if="pressupost.servei2!==undefined">{{pressupost.servei2}}</li>
+            <li v-if="pressupost.servei3!==undefined">{{pressupost.servei3}}</li>
+          </ul>
+        <code>Preu:</code> {{pressupost.totalPressupostos}}€
       </div>
     </div>
   </div>
@@ -42,7 +58,20 @@ export default {
          servei1: 'Pàgina web',
          servei2: 'Consultoría SEO',
          servei3: 'Campanya Google Ads',
-         llistaPressupostos: []
+         llistaPressupostos: [],
+         id: 0,
+         cerca: "",
+         llistaPressupostosRender: []
+    }
+  },
+  watch: {
+    cerca: function(cerca){
+          this.llistaPressupostosRender = this.llistaPressupostos.filter(function filtrar(obj) {
+          if (obj.nomClient.toLowerCase().includes(cerca.toLowerCase())||obj.nomPressupost.toLowerCase().includes(cerca.toLowerCase())) {
+        return true;
+          }
+        })
+        console.log(this.llistaPressupostosRender);
     }
   },
   mounted() {
@@ -54,6 +83,7 @@ export default {
       }
     }
   },
+
   props:{
         totalPressupost: Number,
         arrayCheck: Array,
@@ -62,9 +92,10 @@ export default {
         totalPressupostos: Number,
         showPressupostos: Boolean
     },
-   computed: {
+  computed: {
     seo(){
       if(this.arrayCheck.includes("300")===true)
+      router.replace({query: {servei1:this.servei1}})
       return 300
     },
     ads(){
@@ -74,12 +105,14 @@ export default {
   },
   methods: {
     addPressupostArray: function(){
+      let id = this.llistaPressupostos.length+1
       let pressupostNom = this.nomPressupost
       let clientNome = this.nomClient
       let pressupostTotal = this.totalPressupostos
       let llistaPressupostos = this.llistaPressupostos
 
-      function Pressupost(pressupostNom, clientNome, pressupostTotal, pagina, seo, ads){
+      function Pressupost(id, pressupostNom, clientNome, pressupostTotal, pagina, seo, ads){
+        this.id=id
         this.nomPressupost=pressupostNom
         this.nomClient=clientNome
         this.totalPressupostos=pressupostTotal
@@ -87,9 +120,8 @@ export default {
         this.servei2=seo
         this.servei3=ads
       }
-      console.log(pressupostTotal);
       if(pressupostNom!==''&clientNome!==''){
-        const nouPressupost = new Pressupost(pressupostNom,clientNome,pressupostTotal)
+        const nouPressupost = new Pressupost(id, pressupostNom,clientNome,pressupostTotal)
       if(this.totalPressupost!==0){
         nouPressupost.servei1=this.servei1 
       }
@@ -100,31 +132,67 @@ export default {
          nouPressupost.servei3=this.servei3
       }
       llistaPressupostos.push(nouPressupost)
-      console.log(llistaPressupostos)
       }
       saveLocal()
       function saveLocal() {
       const parsed = JSON.stringify(llistaPressupostos);
       localStorage.setItem('llistaPressupostos', parsed);
-    }
-      
+      }  
+    },
+    ordenarAZ: function(){
+      this.llistaPressupostos.sort(function(a,b){
+        if(a.nomPressupost.toLowerCase() >b.nomPressupost.toLowerCase() ){
+          return 1
+        }
+        if(a.nomPressupost.toLowerCase() <b.nomPressupost.toLowerCase() ){
+          return -1
+        }
+        return 0
+      })
+    },
+    ordenarClient: function(){
+      this.llistaPressupostos.sort(function(a,b){
+        if(a.nomClient.toLowerCase() >b.nomClient.toLowerCase() ){
+          return 1
+        }
+        if(a.nomClient.toLowerCase() <b.nomClient.toLowerCase() ){
+          return -1
+        }
+        return 0
+      })
+    },
+    ordenarReset: function(){
+       this.llistaPressupostos.sort(function(a,b){
+        if(a.id>b.id){
+          return 1
+        }
+        if(a.id<b.id){
+          return -1
+        }
+        return 0
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-hr{
-  border: 2px solid red;
+.filter{
+  display: flex;
+  justify-content: space-evenly;
+}
+.filter button{
+  padding-top: 0rem;
+  padding-bottom: 0rem;
 }
 h3{
   margin-top: 1rem;
   text-align: center;
-  color:#f77754;
+  color:#718096;
 }
 h2{
   text-align: center;
-  color:#f77754;
+  color: #718096;
   padding-bottom: 1rem;
 }
 p{
@@ -132,18 +200,20 @@ p{
 }
 .container{
   padding: 1rem;
-  background-color: rgb(255, 255, 255);
+  background-color: #e3e3e9;
   border-radius: 1rem;
+  border: 3px solid #718096;
 }
 .containerList{
   padding: 1rem;
-  background-color: rgb(255, 255, 255);
+  background-color: #e3e3e9;
   border-radius: 1rem;
   margin: 1rem;
   color: #718096;
+  border: 3px solid #718096;
 }
 code{
-  color: #f77754;
+  color: #171347 ;
   font-weight: 600;
   font-size: 1rem;
   font-family: 'Nunito Sans', sans-serif;
@@ -153,19 +223,31 @@ code{
 .colbutton{
   text-align: center;
 }
-button{
-  padding: 1.2rem;
-  background-color: #3fbf97;
-  border-color: #3fbf97;
+.myBtn {
+  background: #89d8d3;
+  background-image: -webkit-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -moz-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -ms-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -o-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: linear-gradient(to bottom, #89d8d3, #2980b9);
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  border-radius: 10px;
+  border-color: #89d8d3;
   color: #fff;
   font-size: 1rem;
-  font-weight: 600;
-  border-radius: 15px;
-  cursor: pointer;
+  padding: 0.5rem;
+  text-decoration: none;
 }
-button:hover{
-    background-color: #309675;
-    transition: all .2s ease;
+.myBtn:hover {
+  background: #2980b9;
+  background-image: -webkit-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -moz-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -ms-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -o-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: linear-gradient(to bottom, #2980b9, #89d8d3);
+  text-decoration: none;
+  color: #ffffff;
 }
 
 </style>

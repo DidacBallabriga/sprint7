@@ -1,36 +1,39 @@
 <template>
   <div class="pressupostos container">
     <div class="row justify-content-start">
-    <div class="col-6">
-      <div class="infoPressupost">
-        <p>NOM PRESSUPOST*<input type="text" v-model="nomPressupost" placeholder="exemple: SEO Local"></p>
-        <p>CLIENT*<input type="text" v-model="nomClient" placeholder="exemple: IT Academy"></p>
-      </div>
-        <p class="nota">*El <b>nom del pressupost</b> i de <b>client</b> son <b>nessesaris</b> per guardar les dades.</p>
-      <h2>¿Qué vol fer?</h2>
-      <div class="containerPropi">
-        <input type="checkbox" value=500 v-model="preu" @change="showDetails">Una pàgina web (500€)
-        <br>
-        <div class="panell" v-if="show"><Panell @preuWebPagines="sumaPreuWeb" @preuWeb="sumaPreuWeb"/><br></div>
-        <input type="checkbox" value=300 v-model="preu">Una consultoría SEO (300€) 
-        <br>
-        <input type="checkbox" value=200 v-model="preu">Una campanya de Google Ads (200€)
-        <br>
-      </div>
-      <hr class="divider">
-      <h4>Aquí trobarà el <b>cost total</b> del seu pressupost:</h4>
-      <h3>Preu: {{ totalPressupostos }}€</h3>
-      <hr class="divider">
-       <div class="buttons">
-          <button @click="$router.push('/')">◁ Tornar enrere</button>
-          <button v-on:click="myAlert()">✓ Continuar</button>
+      <div class="col-lg-6">
+        <div class="infoPressupost">
+          <p>NOM PRESSUPOST*<input type="text" v-model="nomPressupost" placeholder="exemple: SEO Local"></p>
+          <p>CLIENT*<input type="text" v-model="nomClient" placeholder="exemple: IT Academy"></p>
         </div>
-      </div>
-      <div class="col-6">
-        <button @click="showPressupostosFunction">Veure/Ocultar pressupostos desats</button>
-        <PressupostList :totalPressupost="totalPanell" :arrayCheck="preu" :nomPressupost="nomPressupost" :nomClient="nomClient" :totalPressupostos="totalPressupostos" :showPressupostos="showPressupostos" /></div>
-      </div>
-    
+          <p class="nota">*El <b>nom del pressupost</b> i de <b>client</b> son <b>nessesaris</b> per guardar les dades.</p>
+          <h2>¿Qué vol fer?</h2>
+            <div class="containerPropi">
+              <input type="checkbox" value=500 v-model="preu" @change="showDetails">Una pàgina web (500€)
+              <br>
+              <div class="panell" v-if="show">
+                <Panell @preuWebPagines="sumaPreuWeb" @preuWeb="sumaPreuWeb"/><br>
+              </div>
+                <input type="checkbox" value=300 v-model="preu">Una consultoría SEO (300€)<br>
+                <input type="checkbox" value=200 v-model="preu">Una campanya de Google Ads (200€)<br>
+            </div>
+            <hr class="divider">
+            <h4>Aquí trobarà el <b>cost total</b> del seu pressupost:</h4>
+            <h3>Preu: {{ totalPressupostos }}€</h3>
+            <hr class="divider">
+            <div class="buttons">
+              <button class="myBtn btn" @click="$router.push('/')">◁ Tornar enrere</button>
+              <button class="myBtn btn" v-on:click="myAlert()">✓ Continuar</button>
+            </div>
+        </div>
+        <div class="col-lg-6">
+          <PressupostList :totalPressupost="totalPanell" :arrayCheck="preu" :nomPressupost="nomPressupost" :nomClient="nomClient" :totalPressupostos="totalPressupostos" :showPressupostos="showPressupostos"/>
+            <div class="buttons">
+              <button class="myBtn btn" v-if="showPressupostos===false" @click="showPressupostosFunction"><img src="@/assets/show_eye_icon_183818.svg" alt=""> Veure pressupostos desats</button>
+              <button class="myBtn btn" v-if="showPressupostos===true" @click="showPressupostosFunction"><img src="@/assets/hide_icon_183794.svg" alt=""> Ocultar llistat de pressupostos</button>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -53,8 +56,13 @@ export default {
     nomPressupost: '',
     nomClient: '',
     pressupostos: [],
-    showPressupostos: false
+    showPressupostos: false,
     }
+  },
+  watch: {
+    nomPressupost: function(){
+      this.$router.replace({query:{nom:this.nomPressupost}})
+      }
   },
   computed: {
     totalPressupostos(){
@@ -86,7 +94,7 @@ export default {
     },
     myAlert: function(){
       alert("Moltes gràcies! ✅ Hem rebut la seva comanda")
-    }
+    },
   }
 }
 </script>
@@ -139,23 +147,35 @@ h4{
     background: radial-gradient(ellipse at center, #d1dbe7 0, rgba(255, 255, 255, 0) 75%);
     margin: 2rem;
 }
-button{
-  padding: 1.2rem;
-  background-color: #3fbf97;
-  border-color: #3fbf97;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 15px;
-  cursor: pointer;
-  margin: 1rem;
-}
-button:hover{
-    background-color: #309675;
-    transition: all .2s ease;
-}
 .buttons{
-  padding: 2rem;
+  padding-bottom: 2rem;
   text-align: center;
+}
+.myBtn {
+  background: #89d8d3;
+  background-image: -webkit-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -moz-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -ms-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: -o-linear-gradient(top, #89d8d3, #2980b9);
+  background-image: linear-gradient(to bottom, #89d8d3, #2980b9);
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  border-radius: 10px;
+  border-color: #89d8d3;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 10px 20px 10px 20px;
+  margin: 1rem;
+  text-decoration: none;
+}
+.myBtn:hover {
+  background: #2980b9;
+  background-image: -webkit-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -moz-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -ms-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: -o-linear-gradient(top, #2980b9, #89d8d3);
+  background-image: linear-gradient(to bottom, #2980b9, #89d8d3);
+  text-decoration: none;
+  color: #ffffff;
 }
 </style>
