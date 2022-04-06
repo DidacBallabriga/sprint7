@@ -1,10 +1,10 @@
 <template>
   <div class="pressupostos container">
     <div class="row justify-content-start">
-      <div class="col-lg-6">
+      <div class="col-lg-6 container-sm">
         <div class="infoPressupost">
           <p>NOM PRESSUPOST*<input type="text" v-model="nomPressupost" placeholder="exemple: SEO Local"></p>
-          <p>CLIENT*<input type="text" v-model="nomClient" placeholder="exemple: IT Academy"></p>
+          <p>NOM DEL CLIENT*<input type="text" v-model="nomClient" placeholder="exemple: IT Academy"></p>
         </div>
           <p class="nota">*El <b>nom del pressupost</b> i de <b>client</b> son <b>nessesaris</b> per guardar les dades.</p>
           <h2>¿Qué vol fer?</h2>
@@ -59,11 +59,6 @@ export default {
     showPressupostos: false,
     }
   },
-  watch: {
-    nomPressupost: function(){
-      this.$router.replace({query:{nom:this.nomPressupost}})
-      }
-  },
   computed: {
     totalPressupostos(){
       let sumaPreu = this.preu.reduce((acumulador, numero)=>parseInt(acumulador)+parseInt(numero));
@@ -105,6 +100,11 @@ export default {
 .infoPressupost{
   display: flex;
   flex-direction: row;
+}
+@media (max-width: 600px){ 
+  .infoPressupost{
+    flex-direction: column;
+}
 }
 .infoPressupost p{
   margin-bottom: 0rem;

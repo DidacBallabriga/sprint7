@@ -17,7 +17,7 @@
     </div>
     </div>
     </div>
-    <div v-if="showPressupostos">
+    <div v-if="showPressupostos" class="container-sm">
       <h3>Llistat de pressupostos</h3>
       <h6>ORDENA PER NOM:</h6>
       <div class="filter">
@@ -95,7 +95,6 @@ export default {
   computed: {
     seo(){
       if(this.arrayCheck.includes("300")===true)
-      router.replace({query: {servei1:this.servei1}})
       return 300
     },
     ads(){
@@ -181,9 +180,19 @@ export default {
   display: flex;
   justify-content: space-evenly;
 }
+@media (max-width: 600px){
+  .filter{
+    flex-direction: column;
+  }
+}
 .filter button{
   padding-top: 0rem;
   padding-bottom: 0rem;
+}
+@media (max-width: 600px){
+  .filter button{
+    margin: 0.5rem;
+  }
 }
 h3{
   margin-top: 1rem;
