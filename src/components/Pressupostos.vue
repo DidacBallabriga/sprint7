@@ -23,7 +23,6 @@
             <hr class="divider">
             <div class="buttons">
               <button class="myBtn btn" @click="$router.push('/')">◁ Tornar enrere</button>
-              <button class="myBtn btn" v-on:click="myAlert()">✓ Continuar</button>
             </div>
         </div>
         <div class="col-lg-6">
@@ -86,10 +85,7 @@ export default {
       } else {
         this.showPressupostos=false
       }
-    },
-    myAlert: function(){
-      alert("Moltes gràcies! ✅ Hem rebut la seva comanda")
-    },
+    }
   }
 }
 </script>
