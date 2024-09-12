@@ -1,15 +1,15 @@
 <template>
-  <div class="panell">
+  <div class="panel">
      <p>Nombre de pàgines 
     <InputPanell 
      :value="pagines" 
      @sumaInputPanell="sumaTotalPagines" 
      @restaInputPanell="restaTotalPagines"
      @InputPanell="actualPagines"/>
-     <b-button @click="$bvModal.show('modal-scoped')"><img src="@/assets/info_about_information_icon_132735.svg" alt=""> </b-button>
+        <b-button class="myButton" @click="$bvModal.show('modal-scoped')"><img class="myImage" src="@/assets/icons8-acerca-de.svg" alt=""></b-button>
         <b-modal id="modal-scoped">
-            <p>Modal Body with button</p>
-        </b-modal>
+            <p>Si us plau, informi del nombre de pàgines que tindrà la seva web</p>
+        </b-modal> 
      </p> 
 
      <p>Nombre d'idiomes  
@@ -18,11 +18,11 @@
      @sumaInputPanell="sumaTotalIdiomes" 
      @restaInputPanell="restaTotalIdiomes"
      @InputPanell="actualIdiomes"/> 
-     <b-button @click="$bvModal.show('modal-scoped')">i</b-button>
-        <b-modal id="modal-scoped">
-            <p>Modal Body with button</p>
+        <b-button class="myButton" @click="$bvModal.show('modal-scoped-1')"><img class="myImage" src="@/assets/icons8-acerca-de.svg" alt=""></b-button>
+        <b-modal id="modal-scoped-1">
+            <p>Si us plau, informi del nombre d'idiomes que tindrà la seva web</p>
         </b-modal>
-     </p>     
+     </p> 
   </div>
 </template>
 
@@ -84,19 +84,45 @@ export default {
 </script>
 
 <style scoped>
+.modal-content{
+    border: 10px solid black !important;
+}
+.myButton{
+    background-color: transparent;
+    border: none;
+}
+.myButton:hover{
+    background-color: transparent;
+    border: none;
+}
+.myButton:focus{
+    background-color: transparent;
+    border: none;
+}
+.myButton:visited{
+    background-color: transparent;
+    border: none;
+}
 p{
     display: flex;
     align-items: center;
 }
-.panell{
-    display: inline-block;
+.panel{
     border: 3px solid #718096;
     padding: 1rem;
     border-radius: 1rem;
+    width: 22rem;
 }
-img{
+.info{
+    height: 1.5rem;
+    width: 1.5rem;
+}
+.myImage{
     height: 1rem;
     width: 1rem;
-    background-color: white;
+}
+.myImage:hover{
+    height: 1.5rem;
+    width: 1.5rem;
 }
 </style>

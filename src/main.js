@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import './plugins/bootstrap-vue'
+import './plugins/bootstrap-vue.js'
 import App from './App.vue'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'

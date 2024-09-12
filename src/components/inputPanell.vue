@@ -48,7 +48,7 @@ button {
     border-radius: 5px;
     color: white;
     text-decoration: none;
-    background-color: #f77754;
+    background-color: #89bfd8;
     border: none;
     width: 1.7rem;
 }
